@@ -2,9 +2,7 @@ package com.thiago.hospital_care.model;
 
 import com.thiago.hospital_care.model.enums.SpecialtyEnum;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -37,19 +35,25 @@ public class Doctor {
     private SpecialtyEnum specialty;
 
     @Column(nullable = false, unique = true)
-    private String email; // ADICIONAR VALIDAÇÃO
+    @Email(message = "E-mail inválido.")
+    @NotBlank(message = "E-mail não pode estar vazio.")
+    private String email;
 
     @Column(nullable = false)
-    private String address; // ADICIONAR VALIDAÇÃO
+    private String address;
 
     @Column(nullable = false)
-    private String cep; // ADICIONAR VALIDAÇÃO
+    @Pattern(
+            regexp = "^\\d{5}-?\\d{3}$",
+            message = "CEP inválido. Use o formato 12345-678."
+    )
+    private String cep;
 
     @Column(nullable = false)
-    private String city; // ADICIONAR VALIDAÇÃO
+    private String city;
 
     @Column(nullable = false)
-    private String state; // ADICIONAR VALIDAÇÃO
+    private String state;
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private List<Appointment> appointments = new ArrayList<>();

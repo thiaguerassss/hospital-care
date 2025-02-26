@@ -2,9 +2,7 @@ package com.thiago.hospital_care.model;
 
 import com.thiago.hospital_care.model.enums.SexEnum;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
@@ -41,22 +39,32 @@ public class Patient {
     private SexEnum sex;
 
     @Column(nullable = false)
-    private String phone; // ADICIONAR VALIDAÇÃO
+    @Pattern(
+            regexp = "^(\\(?\\d{2}\\)?\\s?)?(\\d{4,5}\\-?\\d{4})$",
+            message = "Número de telefone inválido. Use o formato (11) 99999-9999 ou 11999999999."
+    )
+    private String phone;
 
     @Column(nullable = false, unique = true)
-    private String email; // ADICIONAR VALIDAÇÃO
+    @Email(message = "E-mail inválido.")
+    @NotBlank(message = "E-mail não pode estar vazio.")
+    private String email;
 
     @Column(nullable = false)
-    private String address; // ADICIONAR VALIDAÇÃO
+    private String address;
 
     @Column(nullable = false)
-    private String cep; // ADICIONAR VALIDAÇÃO
+    @Pattern(
+            regexp = "^\\d{5}-?\\d{3}$",
+            message = "CEP inválido. Use o formato 12345-678."
+    )
+    private String cep;
 
     @Column(nullable = false)
-    private String city; // ADICIONAR VALIDAÇÃO
+    private String city;
 
     @Column(nullable = false)
-    private String state; // ADICIONAR VALIDAÇÃO
+    private String state;
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
     private List<Appointment> consultations = new ArrayList<>();
