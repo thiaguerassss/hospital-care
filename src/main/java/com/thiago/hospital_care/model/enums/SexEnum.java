@@ -13,4 +13,13 @@ public enum SexEnum {
     SexEnum(String description){
         this.description = description;
     }
+
+    public static SexEnum fromString(String value) {
+        for (SexEnum specialty : SexEnum.values()) {
+            if (specialty.getDescription().equalsIgnoreCase(value)) {
+                return specialty;
+            }
+        }
+        throw new IllegalArgumentException("Sexo inválido: " + value);
+    }
 }

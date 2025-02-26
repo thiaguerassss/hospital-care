@@ -18,4 +18,12 @@ public enum SpecialtyEnum {
         this.description = description;
     }
 
+    public static SpecialtyEnum fromString(String value) {
+        for (SpecialtyEnum specialty : SpecialtyEnum.values()) {
+            if (specialty.getDescription().equalsIgnoreCase(value)) {
+                return specialty;
+            }
+        }
+        throw new IllegalArgumentException("Especialidade inválida: " + value);
+    }
 }

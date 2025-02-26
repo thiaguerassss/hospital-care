@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Table(name = "appointment")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Appointment {
 
     @Id
@@ -41,5 +40,13 @@ public class Appointment {
     @ManyToOne
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
+
+    public Appointment(String dateTime, String description, String type, String status){
+        this.id = null;
+        this.dateTime = LocalDateTime.parse(dateTime);
+        this.description = description;
+        this.type = AppointmentTypeEnum.fromString(type);
+        this.status = AppointmentStatusEnum.fromString(status);
+    }
 }
 

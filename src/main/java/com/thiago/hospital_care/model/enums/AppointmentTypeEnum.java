@@ -13,4 +13,13 @@ public enum AppointmentTypeEnum {
     AppointmentTypeEnum(String description){
         this.description = description;
     }
+
+    public static AppointmentTypeEnum fromString(String value) {
+        for (AppointmentTypeEnum specialty : AppointmentTypeEnum.values()) {
+            if (specialty.getDescription().equalsIgnoreCase(value)) {
+                return specialty;
+            }
+        }
+        throw new IllegalArgumentException("Tipo inválido: " + value);
+    }
 }

@@ -59,5 +59,20 @@ public class Patient {
     private String state; // ADICIONAR VALIDAÇÃO
 
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
-    private List<Appointment> consultations = new ArrayList<>(); // VERIFICAR COMO VAI FICAR NO BANCO
+    private List<Appointment> consultations = new ArrayList<>();
+
+    public Patient(String name, String cpf, String birthDate, String sex, String phone, String email, String address,
+                   String cep, String city, String state){
+        this.id = null;
+        this.name = name;
+        this.cpf = cpf;
+        this.birthDate = LocalDate.parse(birthDate);
+        this.sex = SexEnum.fromString(sex);
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.cep = cep;
+        this.city = city;
+        this.state = state;
+    }
 }

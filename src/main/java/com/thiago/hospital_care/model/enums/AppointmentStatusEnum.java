@@ -13,4 +13,13 @@ public enum AppointmentStatusEnum {
     AppointmentStatusEnum(String description){
         this.description = description;
     }
+
+    public static AppointmentStatusEnum fromString(String value) {
+        for (AppointmentStatusEnum specialty : AppointmentStatusEnum.values()) {
+            if (specialty.getDescription().equalsIgnoreCase(value)) {
+                return specialty;
+            }
+        }
+        throw new IllegalArgumentException("Status inválido: " + value);
+    }
 }
