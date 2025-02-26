@@ -1,9 +1,7 @@
 package com.thiago.hospital_care.model.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
 public enum AppointmentStatusEnum {
     SCHEDULED("Agendada"),
@@ -11,4 +9,8 @@ public enum AppointmentStatusEnum {
     COMPLETED("Concluída");
 
     private final String description;
+
+    AppointmentStatusEnum(String description){
+        this.description = description;
+    }
 }

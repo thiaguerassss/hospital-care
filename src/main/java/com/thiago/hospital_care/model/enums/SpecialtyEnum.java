@@ -1,9 +1,7 @@
 package com.thiago.hospital_care.model.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
 public enum SpecialtyEnum {
     CARDIOLOGY("Cardiologia"),
@@ -15,5 +13,9 @@ public enum SpecialtyEnum {
     GENERAL_CLINICAL("Clínico geral");
 
     private final String description;
+
+    SpecialtyEnum(String description){
+        this.description = description;
+    }
 
 }

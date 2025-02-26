@@ -1,9 +1,7 @@
 package com.thiago.hospital_care.model.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
 public enum SexEnum {
     MALE ("Masculino"),
@@ -11,4 +9,8 @@ public enum SexEnum {
     OTHER("Outro");
 
     private final String description;
+
+    SexEnum(String description){
+        this.description = description;
+    }
 }

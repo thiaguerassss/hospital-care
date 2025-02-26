@@ -1,9 +1,7 @@
 package com.thiago.hospital_care.model.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
 public enum AppointmentTypeEnum {
     ROUTINE("Rotina"),
@@ -11,4 +9,8 @@ public enum AppointmentTypeEnum {
     EXAM("Exame");
 
     private final String description;
+
+    AppointmentTypeEnum(String description){
+        this.description = description;
+    }
 }
