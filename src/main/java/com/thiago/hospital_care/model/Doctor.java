@@ -32,8 +32,8 @@ public class Doctor extends User {
     private List<Appointment> appointments = new ArrayList<>();
 
     public Doctor(String name, String cpf, String password, String birthDate, String sex, String phone, String email,
-                  String cep, String crm, String specialty){
-        super(name, cpf, password, birthDate, sex, phone, email, cep);
+                  String cep, Integer addressNumber, String crm, String specialty){
+        super(name, cpf, password, birthDate, sex, phone, email, cep, addressNumber);
         this.id = null;
         this.crm = crm;
         this.specialty = SpecialtyEnum.fromString(specialty);

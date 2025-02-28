@@ -25,8 +25,8 @@ public class Patient extends User {
     private List<Appointment> appointments = new ArrayList<>();
 
     public Patient(String name, String cpf, String password, String birthDate, String sex, String phone, String email,
-                   String cep){
-        super(name, cpf, password, birthDate, sex, phone, email, cep);
+                   String cep, Integer addressNumber){
+        super(name, cpf, password, birthDate, sex, phone, email, cep, addressNumber);
         this.id = null;
     }
 }

@@ -20,7 +20,7 @@ public abstract class User {
     @Size(min = 2, max = 100, message = "Nome deve ter no mínimo 3 caracteres e no máximo 100.")
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, updatable = false)
     @NotBlank(message = "CPF não pode estar vazio.")
     @CPF(message = "CPF inválido.")
     private String cpf;
@@ -52,16 +52,19 @@ public abstract class User {
     private String email;
 
     @Column(nullable = false)
-    @NotBlank(message = "Endereço não pode ser nulo/vazio.")
-    private String address;
-
-    @Column(nullable = false)
     @NotBlank(message = "CEP não pode ser nulo/vazio.")
     @Pattern(
             regexp = "^\\d{5}-?\\d{3}$",
             message = "CEP inválido. Use o formato 12345-678."
     )
     private String cep;
+
+    @Column
+    private Integer addressNumber;
+
+    @Column(nullable = false)
+    @NotBlank(message = "Endereço não pode ser nulo/vazio.")
+    private String address;
 
     @Column(nullable = false)
     @NotBlank(message = "Cidade não pode ser nula/vazia.")
@@ -72,7 +75,7 @@ public abstract class User {
     private String state;
 
     public User(String name, String cpf, String password, String birthDate, String sex, String phone, String email,
-                String cep){
+                String cep, Integer addressNumber){
         this.name = name;
         this.cpf = cpf;
         this.password = password;
@@ -81,5 +84,6 @@ public abstract class User {
         this.phone = phone;
         this.email = email;
         this.cep = cep;
+        this.addressNumber = addressNumber;
     }
 }

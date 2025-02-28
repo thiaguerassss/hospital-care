@@ -53,4 +53,6 @@ public class UserCreateDTO {
             message = "CEP inválido. Use o formato 12345-678."
     )
     private String cep;
+
+    private Integer addressNumber;
 }
