@@ -3,6 +3,7 @@ package com.thiago.hospital_care.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.thiago.hospital_care.model.enums.SpecialtyEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -20,18 +21,19 @@ public class Doctor extends User {
     private Long id;
 
     @Column(unique = true, nullable = false)
+    @NotBlank(message = "CRM não pode ser nulo/vazio.")
     private String crm;
 
     @Column(nullable = false)
     private SpecialtyEnum specialty;
 
-    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Appointment> appointments = new ArrayList<>();
 
     public Doctor(String name, String cpf, String password, String birthDate, String sex, String phone, String email,
-                  String address, String cep, String city, String state, String crm, String specialty){
-        super(name, cpf, password, birthDate, sex, phone, email, address, cep, city, state);
+                  String cep, String crm, String specialty){
+        super(name, cpf, password, birthDate, sex, phone, email, cep);
         this.id = null;
         this.crm = crm;
         this.specialty = SpecialtyEnum.fromString(specialty);

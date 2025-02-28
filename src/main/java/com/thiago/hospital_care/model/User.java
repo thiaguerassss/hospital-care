@@ -39,6 +39,7 @@ public abstract class User {
     private SexEnum sex;
 
     @Column(nullable = false)
+    @NotBlank(message = "Telefone não pode ser nulo/vazio.")
     @Pattern(
             regexp = "^(\\(?\\d{2}\\)?\\s?)?(\\d{4,5}\\-?\\d{4})$",
             message = "Número de telefone inválido. Use o formato (11) 99999-9999 ou 11999999999."
@@ -51,9 +52,11 @@ public abstract class User {
     private String email;
 
     @Column(nullable = false)
+    @NotBlank(message = "Endereço não pode ser nulo/vazio.")
     private String address;
 
     @Column(nullable = false)
+    @NotBlank(message = "CEP não pode ser nulo/vazio.")
     @Pattern(
             regexp = "^\\d{5}-?\\d{3}$",
             message = "CEP inválido. Use o formato 12345-678."
@@ -61,13 +64,15 @@ public abstract class User {
     private String cep;
 
     @Column(nullable = false)
+    @NotBlank(message = "Cidade não pode ser nula/vazia.")
     private String city;
 
     @Column(nullable = false)
+    @NotBlank(message = "Estado não pode ser nulo/vazio.")
     private String state;
 
     public User(String name, String cpf, String password, String birthDate, String sex, String phone, String email,
-                String address, String cep, String city, String state){
+                String cep){
         this.name = name;
         this.cpf = cpf;
         this.password = password;
@@ -75,9 +80,6 @@ public abstract class User {
         this.sex = SexEnum.fromString(sex);
         this.phone = phone;
         this.email = email;
-        this.address = address;
         this.cep = cep;
-        this.city = city;
-        this.state = state;
     }
 }

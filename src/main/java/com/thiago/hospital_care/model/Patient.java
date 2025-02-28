@@ -20,13 +20,13 @@ public class Patient extends User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Appointment> appointments = new ArrayList<>();
 
     public Patient(String name, String cpf, String password, String birthDate, String sex, String phone, String email,
-                   String address, String cep, String city, String state){
-        super(name, cpf, password, birthDate, sex, phone, email, address, cep, city, state);
+                   String cep){
+        super(name, cpf, password, birthDate, sex, phone, email, cep);
         this.id = null;
     }
 }

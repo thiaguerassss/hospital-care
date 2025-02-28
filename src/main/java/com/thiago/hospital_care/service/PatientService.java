@@ -1,5 +1,8 @@
 package com.thiago.hospital_care.service;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thiago.hospital_care.model.Patient;
 import com.thiago.hospital_care.repository.PatientRepository;
 import com.thiago.hospital_care.service.exception.ObjectNotFoundException;
@@ -24,18 +27,16 @@ public class PatientService {
     }
 
     @Transactional
-    public Patient update(Patient patient){
+    public Patient update(Patient patient) throws JsonMappingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         Patient newPatient = this.findById(patient.getId());
-        newPatient.setName(patient.getName());
-        newPatient.setPassword(patient.getPassword());
-        newPatient.setSex(patient.getSex());
-        newPatient.setPhone(patient.getPhone());
-        newPatient.setEmail(patient.getEmail());
-        newPatient.setAddress(patient.getAddress());
-        newPatient.setCep(patient.getCep());
-        newPatient.setCity(patient.getCity());
-        newPatient.setState(patient.getState());
-        // ADICIONAR OBJECTMAPPER
+        objectMapper.updateValue(newPatient, patient);
         return this.patientRepository.save(newPatient);
+    }
+
+    public void delete(Long id){
+        findById(id);
+        this.patientRepository.deleteById(id);
     }
 }
