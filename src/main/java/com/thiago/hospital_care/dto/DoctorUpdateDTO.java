@@ -15,7 +15,7 @@ public class DoctorUpdateDTO extends UserUpdateDTO{
     @NotBlank(message = "Especialidade não pode estar vazia.")
     @Pattern(
             regexp = "^(Cardiologia|Ortopedia|Pediatria|Dermatologia|Ginecologia|Urologia|Clínico geral)$",
-            message = "Sexo inválido. Os valores permitidos são: Masculino, Feminino ou Outro."
+            message = "Especialidade inválida."
     )
     private String specialty;
 }
