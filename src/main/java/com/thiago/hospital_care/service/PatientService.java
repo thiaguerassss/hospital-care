@@ -31,7 +31,7 @@ public class PatientService {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         Patient newPatient = this.findById(patient.getId());
-        objectMapper.updateValue(newPatient, patient);
+        newPatient = objectMapper.updateValue(newPatient, patient);
         return this.patientRepository.save(newPatient);
     }
 

@@ -31,7 +31,7 @@ public class DoctorService {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         Doctor newDoctor = this.findById(doctor.getId());
-        objectMapper.updateValue(newDoctor, doctor);
+        newDoctor = objectMapper.updateValue(newDoctor, doctor);
         return this.doctorRepository.save(newDoctor);
     }
 
