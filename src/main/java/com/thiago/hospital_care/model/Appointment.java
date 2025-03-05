@@ -41,12 +41,13 @@ public class Appointment {
     @JoinColumn(name = "doctor_id", nullable = false)
     private Doctor doctor;
 
-    public Appointment(String dateTime, String description, String type, String status){
+    public Appointment(String dateTime, String description, String type, Patient patient){
         this.id = null;
         this.dateTime = LocalDateTime.parse(dateTime);
         this.description = description;
         this.type = AppointmentTypeEnum.fromString(type);
-        this.status = AppointmentStatusEnum.fromString(status);
+        this.status = AppointmentStatusEnum.SCHEDULED;
+        this.patient = patient;
     }
 }
 
