@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class DoctorUpdateDTO extends UserUpdateDTO{
 
+    private Long id;
+
     @NotBlank(message = "CRM não pode ser nulo/vazio.")
     private String crm;
 

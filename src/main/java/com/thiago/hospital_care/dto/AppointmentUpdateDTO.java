@@ -7,6 +7,8 @@ import lombok.Data;
 @Data
 public class AppointmentUpdateDTO {
 
+    private Long id;
+
     @NotBlank(message = "Data e hora não podem ser nulos/vazios.")
     private String dateTime;
 
