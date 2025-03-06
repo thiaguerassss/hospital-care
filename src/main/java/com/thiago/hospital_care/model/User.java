@@ -59,7 +59,7 @@ public abstract class User {
     )
     private String cep;
 
-    @Column
+    @Column(nullable = false)
     private Integer addressNumber;
 
     @Column(nullable = false)
