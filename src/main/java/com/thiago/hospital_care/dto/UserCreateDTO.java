@@ -24,7 +24,7 @@ public class UserCreateDTO {
 
     @NotBlank(message = "Data de nascimento não pode estar vazia.")
     @Pattern(
-            regexp = "^\\d{4}-\\d{2}-\\d{2}$",
+            regexp = "^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$",
             message = "Data de nascimento inválida. Use o formato YYYY-MM-DD."
     )
     private String birthDate;
