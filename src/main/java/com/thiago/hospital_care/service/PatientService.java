@@ -1,8 +1,6 @@
 package com.thiago.hospital_care.service;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thiago.hospital_care.dto.PatientCreateDTO;
 import com.thiago.hospital_care.dto.PatientUpdateDTO;
 import com.thiago.hospital_care.model.Patient;
@@ -15,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Service
 public class PatientService {
@@ -35,11 +34,8 @@ public class PatientService {
 
     @Transactional
     public Patient update(@Valid PatientUpdateDTO data) throws JsonMappingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        Patient patientData = fromDTO(data);
-        Patient patient = this.findById(patientData.getId());
-        patient = objectMapper.updateValue(patient, patientData);
+        Patient patient = this.findById(data.getId());
+        fromDTO(data, patient);
         return this.patientRepository.save(patient);
     }
 
@@ -61,17 +57,14 @@ public class PatientService {
         return new Patient(name, cpf, password, birthDate, sex, phone, email, cep, addressNumber);
     }
 
-    private Patient fromDTO(PatientUpdateDTO data){
-        Patient patient = new Patient();
-        patient.setId(data.getId());
-        patient.setName(data.getName());
-        patient.setPassword(data.getPassword());
-        patient.setBirthDate(LocalDate.parse(data.getBirthDate()));
-        patient.setSex(SexEnum.fromString(data.getSex()));
-        patient.setPhone(data.getPhone());
-        patient.setEmail(data.getEmail());
-        patient.setCep(data.getCep());
-        patient.setAddressNumber(data.getAddressNumber());
-        return patient;
+    private void fromDTO(PatientUpdateDTO data, Patient patient){
+        if (Objects.nonNull(data.getName())) patient.setName(data.getName());
+        if (Objects.nonNull(data.getPassword())) patient.setPassword(data.getPassword());
+        if (Objects.nonNull(data.getBirthDate())) patient.setBirthDate(LocalDate.parse(data.getBirthDate()));
+        if (Objects.nonNull(data.getSex())) patient.setSex(SexEnum.fromString(data.getSex()));
+        if (Objects.nonNull(data.getPhone())) patient.setPhone(data.getPhone());
+        if (Objects.nonNull(data.getEmail())) patient.setEmail(data.getEmail());
+        if (Objects.nonNull(data.getCep())) patient.setCep(data.getCep());
+        if (Objects.nonNull(data.getAddressNumber())) patient.setAddressNumber(data.getAddressNumber());
     }
 }

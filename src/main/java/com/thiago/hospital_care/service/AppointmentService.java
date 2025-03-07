@@ -1,8 +1,6 @@
 package com.thiago.hospital_care.service;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thiago.hospital_care.dto.AppointmentCreateDTO;
 import com.thiago.hospital_care.dto.AppointmentUpdateDTO;
 import com.thiago.hospital_care.model.Appointment;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Service
 public class AppointmentService {
@@ -39,11 +38,8 @@ public class AppointmentService {
 
     @Transactional
     public Appointment update(@Valid AppointmentUpdateDTO data) throws JsonMappingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        Appointment appointmentData = fromDTO(data);
-        Appointment appointment = this.findById(appointmentData.getId());
-        appointment = objectMapper.updateValue(appointment, appointmentData);
+        Appointment appointment = this.findById(data.getId());
+        fromDTO(data,appointment);
         return this.appointmentRepository.save(appointment);
     }
 
@@ -60,12 +56,9 @@ public class AppointmentService {
         return new Appointment(dateTime, description, type, patient);
     }
 
-    private Appointment fromDTO(AppointmentUpdateDTO data){
-        Appointment appointment = new Appointment();
-        appointment.setId(data.getId());
-        appointment.setDateTime(LocalDateTime.parse(data.getDateTime()));
-        appointment.setDescription(data.getDescription());
-        appointment.setStatus(AppointmentStatusEnum.fromString(data.getStatus()));
-        return appointment;
+    private void fromDTO(AppointmentUpdateDTO data, Appointment appointment){
+        if (Objects.nonNull(appointment.getDateTime())) appointment.setDateTime(LocalDateTime.parse(data.getDateTime()));
+        if (Objects.nonNull(appointment.getDescription())) appointment.setDescription(data.getDescription());
+        if (Objects.nonNull(appointment.getStatus())) appointment.setStatus(AppointmentStatusEnum.fromString(data.getStatus()));
     }
 }

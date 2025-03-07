@@ -1,8 +1,6 @@
 package com.thiago.hospital_care.service;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thiago.hospital_care.dto.DoctorCreateDTO;
 import com.thiago.hospital_care.dto.DoctorUpdateDTO;
 import com.thiago.hospital_care.model.Doctor;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Service
 public class DoctorService {
@@ -36,11 +35,8 @@ public class DoctorService {
 
     @Transactional
     public Doctor update(@Valid DoctorUpdateDTO data) throws JsonMappingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        Doctor doctorData = fromDTO(data);
-        Doctor doctor = this.findById(doctorData.getId());
-        doctor = objectMapper.updateValue(doctor, doctorData);
+        Doctor doctor = this.findById(data.getId());
+        fromDTO(data, doctor);
         return this.doctorRepository.save(doctor);
     }
 
@@ -64,19 +60,16 @@ public class DoctorService {
         return new Doctor(name, cpf, password, birthDate, sex, phone, email, cep, addressNumber, crm, specialty);
     }
 
-    private Doctor fromDTO(DoctorUpdateDTO data){
-        Doctor doctor = new Doctor();
-        doctor.setId(data.getId());
-        doctor.setName(data.getName());
-        doctor.setPassword(data.getPassword());
-        doctor.setBirthDate(LocalDate.parse(data.getBirthDate()));
-        doctor.setSex(SexEnum.fromString(data.getSex()));
-        doctor.setPhone(data.getPhone());
-        doctor.setEmail(data.getEmail());
-        doctor.setCep(data.getCep());
-        doctor.setAddressNumber(data.getAddressNumber());
-        doctor.setCrm(data.getCrm());
-        doctor.setSpecialty(SpecialtyEnum.fromString(data.getSpecialty()));
-        return doctor;
+    private void fromDTO(DoctorUpdateDTO data, Doctor doctor){
+        if (Objects.nonNull((data.getName()))) doctor.setName(data.getName());
+        if (Objects.nonNull((data.getPassword()))) doctor.setPassword(data.getPassword());
+        if (Objects.nonNull((data.getBirthDate()))) doctor.setBirthDate(LocalDate.parse(data.getBirthDate()));
+        if (Objects.nonNull((data.getSex()))) doctor.setSex(SexEnum.fromString(data.getSex()));
+        if (Objects.nonNull((data.getPhone()))) doctor.setPhone(data.getPhone());
+        if (Objects.nonNull((data.getEmail()))) doctor.setEmail(data.getEmail());
+        if (Objects.nonNull((data.getCep()))) doctor.setCep(data.getCep());
+        if (Objects.nonNull((data.getAddressNumber()))) doctor.setAddressNumber(data.getAddressNumber());
+        if (Objects.nonNull((data.getCrm()))) doctor.setCrm(data.getCrm());
+        if (Objects.nonNull((data.getSpecialty()))) doctor.setSpecialty(SpecialtyEnum.fromString(data.getSpecialty()));
     }
 }
