@@ -18,5 +18,9 @@ public class AppointmentUpdateDTO {
     @Size(max = 300, message = "São permitidos no máximo 300 caracteres.")
     private String description;
 
+    @Pattern(
+            regexp = "^(Agendada|Cancelada|Concluída)$",
+            message = "Status inválido. Os valores permitidos são: Agendada, Cancelada ou Concluída."
+    )
     private String status;
 }
