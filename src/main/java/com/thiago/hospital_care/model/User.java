@@ -1,6 +1,7 @@
 package com.thiago.hospital_care.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.thiago.hospital_care.model.enums.ProfileEnum;
 import com.thiago.hospital_care.model.enums.SexEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -9,6 +10,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -73,6 +77,20 @@ public abstract class User {
     @Column(nullable = false)
     @NotBlank(message = "Estado não pode ser nulo/vazio.")
     private String state;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @CollectionTable(name = "user_profile")
+    @Column(name = "profile", nullable = false)
+    private Set<Integer> profiles = new HashSet<>();
+
+    public Set<ProfileEnum> getProfiles(){
+        return profiles.stream().map(ProfileEnum::toEnum).collect(Collectors.toSet());
+    }
+
+    public void addProfile(ProfileEnum profileEnum){
+        profiles.add(profileEnum.getCode());
+    }
 
     public User(String name, String cpf, String password, String birthDate, String sex, String phone, String email,
                 String cep, Integer addressNumber){
