@@ -4,12 +4,14 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.thiago.hospital_care.dto.DoctorCreateDTO;
 import com.thiago.hospital_care.dto.DoctorUpdateDTO;
 import com.thiago.hospital_care.model.Doctor;
+import com.thiago.hospital_care.model.enums.ProfileEnum;
 import com.thiago.hospital_care.model.enums.SexEnum;
 import com.thiago.hospital_care.model.enums.SpecialtyEnum;
 import com.thiago.hospital_care.repository.DoctorRepository;
 import com.thiago.hospital_care.service.exception.ObjectNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,9 @@ import java.util.Objects;
 
 @Service
 public class DoctorService {
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     private DoctorRepository doctorRepository;
@@ -30,6 +35,8 @@ public class DoctorService {
     @Transactional
     public Doctor create(@Valid DoctorCreateDTO data){
         Doctor doctor = fromDTO(data);
+        doctor.setPassword(bCryptPasswordEncoder.encode(doctor.getPassword()));
+        doctor.addProfile(ProfileEnum.ADMIN);
         return this.doctorRepository.save(doctor);
     }
 
@@ -62,7 +69,10 @@ public class DoctorService {
 
     private void fromDTO(DoctorUpdateDTO data, Doctor doctor){
         if (Objects.nonNull((data.getName()))) doctor.setName(data.getName());
-        if (Objects.nonNull((data.getPassword()))) doctor.setPassword(data.getPassword());
+        if (Objects.nonNull((data.getPassword()))){
+            doctor.setPassword(data.getPassword());
+            doctor.setPassword(bCryptPasswordEncoder.encode(doctor.getPassword()));
+        }
         if (Objects.nonNull((data.getBirthDate()))) doctor.setBirthDate(LocalDate.parse(data.getBirthDate()));
         if (Objects.nonNull((data.getSex()))) doctor.setSex(SexEnum.fromString(data.getSex()));
         if (Objects.nonNull((data.getPhone()))) doctor.setPhone(data.getPhone());

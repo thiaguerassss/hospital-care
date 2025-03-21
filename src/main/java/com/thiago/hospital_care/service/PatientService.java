@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.thiago.hospital_care.dto.PatientCreateDTO;
 import com.thiago.hospital_care.dto.PatientUpdateDTO;
 import com.thiago.hospital_care.model.Patient;
+import com.thiago.hospital_care.model.enums.ProfileEnum;
 import com.thiago.hospital_care.model.enums.SexEnum;
 import com.thiago.hospital_care.repository.PatientRepository;
 import com.thiago.hospital_care.service.exception.ObjectNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,9 @@ import java.util.Objects;
 
 @Service
 public class PatientService {
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     private PatientRepository patientRepository;
@@ -29,6 +34,8 @@ public class PatientService {
     @Transactional
     public Patient create(@Valid PatientCreateDTO data){
         Patient patient = fromDTO(data);
+        patient.setPassword(bCryptPasswordEncoder.encode(patient.getPassword()));
+        patient.addProfile(ProfileEnum.USER);
         return this.patientRepository.save(patient);
     }
 
@@ -59,7 +66,10 @@ public class PatientService {
 
     private void fromDTO(PatientUpdateDTO data, Patient patient){
         if (Objects.nonNull(data.getName())) patient.setName(data.getName());
-        if (Objects.nonNull(data.getPassword())) patient.setPassword(data.getPassword());
+        if (Objects.nonNull((data.getPassword()))){
+            patient.setPassword(data.getPassword());
+            patient.setPassword(bCryptPasswordEncoder.encode(patient.getPassword()));
+        }
         if (Objects.nonNull(data.getBirthDate())) patient.setBirthDate(LocalDate.parse(data.getBirthDate()));
         if (Objects.nonNull(data.getSex())) patient.setSex(SexEnum.fromString(data.getSex()));
         if (Objects.nonNull(data.getPhone())) patient.setPhone(data.getPhone());
