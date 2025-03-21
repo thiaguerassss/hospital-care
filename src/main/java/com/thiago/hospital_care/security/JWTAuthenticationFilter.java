@@ -1,8 +1,8 @@
 package com.thiago.hospital_care.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thiago.hospital_care.dto.LoginDTO;
 import com.thiago.hospital_care.exception.GlobalExceptionHandler;
-import com.thiago.hospital_care.model.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,21 +25,23 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         setAuthenticationFailureHandler(new GlobalExceptionHandler());
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        setFilterProcessesUrl("/login");
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException {
+
         try {
-            User userCredentials = new ObjectMapper().readValue(request.getInputStream(), User.class);
-            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userCredentials.getCpf(),
-                    userCredentials.getPassword(), new ArrayList<>());
-            Authentication authentication = this.authenticationManager.authenticate(authToken);
-            return authentication;
-        } catch (IOException e){
+            LoginDTO credentials = new ObjectMapper().readValue(request.getInputStream(), LoginDTO.class);
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                    credentials.getCpf(), credentials.getPassword(), new ArrayList<>());
+            return authenticationManager.authenticate(authToken);
+
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain,
                                             Authentication authentication) throws IOException, ServletException {
